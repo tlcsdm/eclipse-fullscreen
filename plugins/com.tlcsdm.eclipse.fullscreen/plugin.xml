@@ -37,13 +37,13 @@
          point="org.eclipse.ui.bindings">
       <key
             commandId="com.tlcsdm.eclipse.fullscreen.fullscreenCommand"
-            contextId="org.eclipse.ui.contexts.window"
+            contextId="org.eclipse.ui.contexts.dialogAndWindow"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="M1+M3+Z">
-      </key>
+      </key>  
       <key
             commandId="com.tlcsdm.eclipse.fullscreen.escCommand"
-            contextId="org.eclipse.ui.contexts.window"
+            contextId="org.eclipse.ui.contexts.dialogAndWindow"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="ESC">
       </key>

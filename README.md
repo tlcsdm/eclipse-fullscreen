@@ -4,8 +4,8 @@ With this small plugin Eclipse and RCP Programs based on Eclipse can run in full
 
 ## Use
 1. Menu Window/Full Screen enter full screen mode.
-2. Ctrl+ALT+Z enter or exit full screen mode.
-3. ESC exit full screen mode.
+2. Ctrl+ALT+Z enter or exit full screen mode in dialogs and windows.
+3. ESC exit full screen mode in dialogs and windows.
 
 ## Build
 
