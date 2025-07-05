@@ -2,29 +2,19 @@
 <?eclipse version="3.2"?>
 <plugin>
    <extension
-         point="org.eclipse.ui.actionSets">
-      <actionSet
-            description="%fullScreenActionSetDesc"
-            id="com.tlcsdm.eclipse.fullscreen.actionSet"
-            label="%fullScreenActionSet"
-            visible="true">
-         <action
-               class="com.tlcsdm.eclipse.fullscreen.FullScreenActionDelegate"
-               definitionId="com.tlcsdm.eclipse.fullscreen.fullscreenCommand"
-               icon="icons/icon16.png"
-               id="com.tlcsdm.eclipse.fullscreen.fullscreenAction"
-               label="%fullScreen"
-               menubarPath="window/additions"
-               style="push">
-         </action>
-         <action
-               class="com.tlcsdm.eclipse.fullscreen.EscActionDelegate"
-               definitionId="com.tlcsdm.eclipse.fullscreen.escCommand"
-               id="com.tlcsdm.eclipse.fullscreen.escAction"
-               label="%esc"
-               style="push">
-         </action>
-      </actionSet>
+         point="org.eclipse.ui.menus">
+     <menuContribution
+         locationURI="menu:window?after=additions">
+       <command
+            commandId="com.tlcsdm.eclipse.fullscreen.fullscreenCommand"
+            label="%fullScreen"
+            icon="icons/icon16.png"
+            style="push">
+         <visibleWhen>
+            <with variable="activeWorkbenchWindow"/>
+         </visibleWhen>
+       </command>
+     </menuContribution>
    </extension>
    <extension
          point="org.eclipse.ui.commands">
@@ -32,12 +22,14 @@
             categoryId="org.eclipse.ui.category.window"
             description="%fullScreenCommandDesc"
             id="com.tlcsdm.eclipse.fullscreen.fullscreenCommand"
+            defaultHandler="com.tlcsdm.eclipse.fullscreen.FullScreenActionDelegate"
             name="%fullScreenCommand">
       </command>
       <command
             categoryId="org.eclipse.ui.category.window"
             description="%escCommandDesc"
             id="com.tlcsdm.eclipse.fullscreen.escCommand"
+            defaultHandler="com.tlcsdm.eclipse.fullscreen.EscActionDelegate"
             name="%escCommand">
       </command>
    </extension>
@@ -78,4 +70,14 @@
       </startup>
    </extension>
 
+	<extension point="org.eclipse.help.toc">
+		<toc file="help/help_toc.xml" primary="true"/>
+	</extension>
+	   <extension
+          point="org.eclipse.help.contexts">
+      <contexts
+            file="help/help_contexts.xml"
+            plugin="com.tlcsdm.eclipse.fullscreen">
+      </contexts>
+   </extension>
 </plugin>

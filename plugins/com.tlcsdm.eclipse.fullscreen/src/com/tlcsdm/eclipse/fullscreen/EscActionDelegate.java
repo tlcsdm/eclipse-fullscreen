@@ -11,13 +11,17 @@
  *******************************************************************************/
 package com.tlcsdm.eclipse.fullscreen;
 
+import org.eclipse.core.commands.AbstractHandler;
+import org.eclipse.core.commands.ExecutionEvent;
+import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
-public class EscActionDelegate implements IWorkbenchWindowActionDelegate {
+public class EscActionDelegate extends AbstractHandler implements IWorkbenchWindowActionDelegate {
 
 	private IWorkbenchWindow window;
 
@@ -52,6 +56,15 @@ public class EscActionDelegate implements IWorkbenchWindowActionDelegate {
 	 * IAction, org.eclipse.jface.viewers.ISelection)
 	 */
 	public void selectionChanged(IAction action, ISelection selection) {
+	}
+
+	@Override
+	public Object execute(ExecutionEvent event) throws ExecutionException {
+		Shell mainShell = Display.getDefault().getActiveShell();
+		if (mainShell.getFullScreen()) {
+			Activator.getDefault().setFullScreen(mainShell, false);
+		}
+		return null;
 	}
 
 }

@@ -41,8 +41,8 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 	public static final String FULLSCREEN_STARTUP = ID + ".fullscreen_startup"; //$NON-NLS-1$
 
 	private static Activator INSTANCE;
-	private Map controlLists;
-	private Map menuBars;
+	private Map<Shell, List<Control>> controlLists;
+	private Map<Shell, Menu> menuBars;
 
 	public static Activator getDefault() {
 		return INSTANCE;
@@ -50,8 +50,8 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-		controlLists = new HashMap();
-		menuBars = new HashMap();
+		controlLists = new HashMap<>();
+		menuBars = new HashMap<>();
 		INSTANCE = this;
 	}
 
@@ -75,7 +75,7 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 			return;
 
 		if (fullScreen) {
-			List controls = hideTrimControls(mainShell);
+			List<Control> controls = hideTrimControls(mainShell);
 			controlLists.put(mainShell, controls);
 			if (getHideMenuBar()) {
 				Menu menuBar = mainShell.getMenuBar();
@@ -99,7 +99,7 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 	}
 
 	private void showTrimControls(Shell mainShell) {
-		List controls = (List) controlLists.get(mainShell);
+		List<Control> controls = controlLists.get(mainShell);
 		if (controls != null) {
 			for (int i = 0; i < controls.size(); i++) {
 				Control control = (Control) controls.get(i);
@@ -108,22 +108,37 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 		}
 	}
 
-	private List hideTrimControls(Shell mainShell) {
-		List controls = new ArrayList();
+	private List<Control> hideTrimControls(Shell mainShell) {
+		List<Control> controls = new ArrayList<>();
 		Control[] children = mainShell.getChildren();
 		for (int i = 0; i < children.length; i++) {
 			Control child = children[i];
-			if (child.isDisposed() || !child.isVisible())
+			if (child.isDisposed() || !child.isVisible()) {
 				continue;
-			if (child.getClass().equals(Canvas.class))
+			}
+			if (child.getClass().equals(Canvas.class)) {
 				continue;
-			if (child.getClass().equals(Composite.class))
+			}
+
+			if (child.getClass().equals(Composite.class)) {
+				boolean hasStatusLine = false;
+				Composite composite = (Composite) child;
+				Control[] childChildren = composite.getChildren();
+				for (Control ch : childChildren) {
+					if (ch.getClass().toString().contains("StatusLine")) { //$NON-NLS-1$
+						hasStatusLine = true;
+					}
+				}
+				if (hasStatusLine) {
+					child.setVisible(!getHideStatusBar());
+					controls.add(child);
+				}
 				continue;
+			}
 
 			// org.eclipse.jface.action.StatusLine is an internal class
 			// the only way to hide it is by getting its name in string form
 			// TODO: find a more elegant way to do fetch the status line
-
 			if (!getHideStatusBar() && child.getClass().toString().contains("StatusLine")) { //$NON-NLS-1$
 				child.setVisible(true);
 			} else {

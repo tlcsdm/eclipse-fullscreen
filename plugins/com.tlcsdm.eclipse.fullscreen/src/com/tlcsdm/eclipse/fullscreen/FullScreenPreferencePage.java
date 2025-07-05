@@ -16,8 +16,11 @@ import java.io.IOException;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 public class FullScreenPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
@@ -28,6 +31,13 @@ public class FullScreenPreferencePage extends FieldEditorPreferencePage implemen
 		super(GRID);
 		preferences = new ScopedPreferenceStore(InstanceScope.INSTANCE, Activator.ID);
 		setPreferenceStore(preferences);
+	}
+
+	@Override
+	protected Control createContents(Composite parent) {
+		Control composite = super.createContents(parent);
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(parent, Activator.ID + ".prefs_fullscreen");
+		return composite;
 	}
 
 	protected void createFieldEditors() {
