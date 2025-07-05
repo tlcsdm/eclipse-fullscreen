@@ -22,6 +22,7 @@ public class FullScreenPreferenceInitializer extends AbstractPreferenceInitializ
 		preferences.setDefault(Activator.HIDE_MENU_BAR, true);
 		preferences.setDefault(Activator.HIDE_STATUS_BAR, true);
 		preferences.setDefault(Activator.FULLSCREEN_STARTUP, false);
+		preferences.setDefault(Activator.DISABLE_ECLIPSE_FULLSCREEN, true);
 	}
 
 }

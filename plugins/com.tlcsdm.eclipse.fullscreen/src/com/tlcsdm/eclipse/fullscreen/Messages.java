@@ -20,6 +20,8 @@ public class Messages extends NLS {
 	public static String FullScreenPreferencePage_0;
 	public static String FullScreenPreferencePage_1;
 	public static String FullScreenPreferencePage_2;
+	public static String FullScreenPreferencePage_3;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

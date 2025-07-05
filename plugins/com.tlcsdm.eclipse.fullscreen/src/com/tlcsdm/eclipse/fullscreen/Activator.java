@@ -18,6 +18,9 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -39,6 +42,7 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 	public static final String HIDE_MENU_BAR = ID + ".hide_menu_bar"; //$NON-NLS-1$
 	public static final String HIDE_STATUS_BAR = ID + ".hide_status_bar"; //$NON-NLS-1$
 	public static final String FULLSCREEN_STARTUP = ID + ".fullscreen_startup"; //$NON-NLS-1$
+	public static final String DISABLE_ECLIPSE_FULLSCREEN = ID + ".disable_eclipse_fullscreen"; //$NON-NLS-1$
 
 	private static Activator INSTANCE;
 	private Map<Shell, List<Control>> controlLists;
@@ -61,6 +65,10 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 		controlLists = null;
 		menuBars.clear();
 		menuBars = null;
+		// Restore on uninstall
+		if (getDisableEclipseFullscreen()) {
+			FullscreenHandlerService.enableFullscreenHandler();
+		}
 		super.stop(context);
 	}
 
@@ -161,12 +169,35 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 		return preferences().getBoolean(FULLSCREEN_STARTUP, false);
 	}
 
+	private boolean getDisableEclipseFullscreen() {
+		return preferences().getBoolean(DISABLE_ECLIPSE_FULLSCREEN, true);
+	}
+
 	private Preferences preferences() {
 		Preferences preferences = Platform.getPreferencesService().getRootNode().node(InstanceScope.SCOPE).node(ID);
 		return preferences;
 	}
 
 	public void earlyStartup() {
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		store.addPropertyChangeListener(new IPropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent event) {
+				String changedProperty = event.getProperty();
+				if (DISABLE_ECLIPSE_FULLSCREEN.equals(changedProperty)) {
+					boolean disabled = store.getBoolean(DISABLE_ECLIPSE_FULLSCREEN);
+					if (disabled) {
+						FullscreenHandlerService.disableFullscreenHandler();
+					} else {
+						FullscreenHandlerService.enableFullscreenHandler();
+					}
+				}
+			}
+		});
+		if (getDisableEclipseFullscreen()) {
+			FullscreenHandlerService.disableFullscreenHandler();
+		}
+
 		if (!getFullscreenStartup()) {
 			return;
 		}
@@ -182,4 +213,5 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 			}
 		});
 	}
+
 }

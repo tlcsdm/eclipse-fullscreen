@@ -80,4 +80,5 @@
             plugin="com.tlcsdm.eclipse.fullscreen">
       </contexts>
    </extension>
+
 </plugin>

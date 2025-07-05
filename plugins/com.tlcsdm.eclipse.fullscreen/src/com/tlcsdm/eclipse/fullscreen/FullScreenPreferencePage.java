@@ -52,6 +52,10 @@ public class FullScreenPreferencePage extends FieldEditorPreferencePage implemen
 		BooleanFieldEditor fullscreenStartupEditor = new BooleanFieldEditor(Activator.FULLSCREEN_STARTUP,
 				Messages.FullScreenPreferencePage_2, getFieldEditorParent());
 		addField(fullscreenStartupEditor);
+
+		BooleanFieldEditor disableEclipseFullscreenEditor = new BooleanFieldEditor(Activator.DISABLE_ECLIPSE_FULLSCREEN,
+				Messages.FullScreenPreferencePage_3, getFieldEditorParent());
+		addField(disableEclipseFullscreenEditor);
 	}
 
 	public void init(IWorkbench workbench) {
