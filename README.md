@@ -7,6 +7,8 @@ With this small plugin Eclipse and RCP Programs based on Eclipse can run in full
 2. Ctrl+ALT+Z enter or exit full screen mode in dialogs and windows.
 3. ESC exit full screen mode in dialogs and windows.
 
+![screenshot](https://raw.github.com/tlcsdm/eclipse-fullscreen/master/plugins/com.tlcsdm.eclipse.fullscreen/help/images/example.png)
+
 ## Build
 
 This project uses [Tycho](https://github.com/eclipse-tycho/tycho) with [Maven](https://maven.apache.org/) to build. It requires Maven 3.9.0 or higher version.
