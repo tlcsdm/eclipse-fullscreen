@@ -80,5 +80,15 @@
             plugin="com.tlcsdm.eclipse.fullscreen">
       </contexts>
    </extension>
+   
+   <extension
+    point="org.eclipse.ui.perspectiveExtensions">
+    <perspectiveExtension
+        targetID="*">
+        <editorOnboardingCommand
+            id="com.tlcsdm.eclipse.fullscreen.fullscreenCommand">
+        </editorOnboardingCommand>
+    </perspectiveExtension>
+   </extension>
 
 </plugin>
