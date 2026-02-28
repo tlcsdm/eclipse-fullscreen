@@ -5,25 +5,31 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.internal.handlers.FullScreenHandler;
 
+@SuppressWarnings("restriction")
 public class FullscreenHandlerService {
 
-	@SuppressWarnings("restriction")
+	private static final String FULLSCREEN_COMMAND_ID = "org.eclipse.ui.window.fullscreenmode";
+
 	public static void enableFullscreenHandler() {
-		ICommandService commandService = (ICommandService) PlatformUI.getWorkbench().getService(ICommandService.class);
-		if (commandService == null) {
-			return;
+		Command command = getFullscreenCommand();
+		if (command != null) {
+			command.setHandler(new FullScreenHandler());
 		}
-		Command command = commandService.getCommand("org.eclipse.ui.window.fullscreenmode");
-		command.setHandler(new FullScreenHandler());
 	}
 
 	public static void disableFullscreenHandler() {
-		ICommandService commandService = (ICommandService) PlatformUI.getWorkbench().getService(ICommandService.class);
-		if (commandService == null) {
-			return;
+		Command command = getFullscreenCommand();
+		if (command != null) {
+			command.setHandler(null);
 		}
-		Command command = commandService.getCommand("org.eclipse.ui.window.fullscreenmode");
-		command.setHandler(null);
+	}
+
+	private static Command getFullscreenCommand() {
+		ICommandService commandService = PlatformUI.getWorkbench().getService(ICommandService.class);
+		if (commandService == null) {
+			return null;
+		}
+		return commandService.getCommand(FULLSCREEN_COMMAND_ID);
 	}
 
 }
