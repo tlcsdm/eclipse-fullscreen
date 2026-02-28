@@ -59,6 +59,9 @@ public class FullScreenActionDelegate extends AbstractHandler implements IWorkbe
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		Shell mainShell = Display.getDefault().getActiveShell();
+		if (mainShell == null) {
+			return null;
+		}
 		Activator.getDefault().setFullScreen(mainShell, !mainShell.getFullScreen());
 		return null;
 	}

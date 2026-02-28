@@ -19,8 +19,6 @@ import java.util.Map;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -96,7 +94,7 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 			controlLists.remove(mainShell);
 			Menu menuBar = mainShell.getMenuBar();
 			if (menuBar == null) {
-				menuBar = (Menu) menuBars.get(mainShell);
+				menuBar = menuBars.get(mainShell);
 				mainShell.setMenuBar(menuBar);
 				menuBars.remove(mainShell);
 			}
@@ -109,8 +107,7 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 	private void showTrimControls(Shell mainShell) {
 		List<Control> controls = controlLists.get(mainShell);
 		if (controls != null) {
-			for (int i = 0; i < controls.size(); i++) {
-				Control control = (Control) controls.get(i);
+			for (Control control : controls) {
 				control.setVisible(true);
 			}
 		}
@@ -119,8 +116,7 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 	private List<Control> hideTrimControls(Shell mainShell) {
 		List<Control> controls = new ArrayList<>();
 		Control[] children = mainShell.getChildren();
-		for (int i = 0; i < children.length; i++) {
-			Control child = children[i];
+		for (Control child : children) {
 			if (child.isDisposed() || !child.isVisible()) {
 				continue;
 			}
@@ -174,23 +170,19 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 	}
 
 	private Preferences preferences() {
-		Preferences preferences = Platform.getPreferencesService().getRootNode().node(InstanceScope.SCOPE).node(ID);
-		return preferences;
+		return Platform.getPreferencesService().getRootNode().node(InstanceScope.SCOPE).node(ID);
 	}
 
 	public void earlyStartup() {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		store.addPropertyChangeListener(new IPropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent event) {
-				String changedProperty = event.getProperty();
-				if (DISABLE_ECLIPSE_FULLSCREEN.equals(changedProperty)) {
-					boolean disabled = store.getBoolean(DISABLE_ECLIPSE_FULLSCREEN);
-					if (disabled) {
-						FullscreenHandlerService.disableFullscreenHandler();
-					} else {
-						FullscreenHandlerService.enableFullscreenHandler();
-					}
+		store.addPropertyChangeListener(event -> {
+			String changedProperty = event.getProperty();
+			if (DISABLE_ECLIPSE_FULLSCREEN.equals(changedProperty)) {
+				boolean disabled = store.getBoolean(DISABLE_ECLIPSE_FULLSCREEN);
+				if (disabled) {
+					FullscreenHandlerService.disableFullscreenHandler();
+				} else {
+					FullscreenHandlerService.enableFullscreenHandler();
 				}
 			}
 		});
@@ -203,13 +195,11 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 		}
 
 		final IWorkbench workbench = PlatformUI.getWorkbench();
-		workbench.getDisplay().asyncExec(new Runnable() {
-			public void run() {
-				IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
-				if (window != null) {
-					Shell mainShell = window.getShell();
-					getDefault().setFullScreen(mainShell, true);
-				}
+		workbench.getDisplay().asyncExec(() -> {
+			IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
+			if (window != null) {
+				Shell mainShell = window.getShell();
+				getDefault().setFullScreen(mainShell, true);
 			}
 		});
 	}

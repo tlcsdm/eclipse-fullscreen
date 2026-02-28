@@ -13,6 +13,8 @@ package com.tlcsdm.eclipse.fullscreen;
 
 import java.io.IOException;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
@@ -65,6 +67,8 @@ public class FullScreenPreferencePage extends FieldEditorPreferencePage implemen
 		try {
 			preferences.save();
 		} catch (IOException e) {
+			Activator.getDefault().getLog()
+					.log(new Status(IStatus.ERROR, Activator.ID, "Failed to save preferences", e));
 		}
 		return super.performOk();
 	}

@@ -61,7 +61,7 @@ public class EscActionDelegate extends AbstractHandler implements IWorkbenchWind
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		Shell mainShell = Display.getDefault().getActiveShell();
-		if (mainShell.getFullScreen()) {
+		if (mainShell != null && mainShell.getFullScreen()) {
 			Activator.getDefault().setFullScreen(mainShell, false);
 		}
 		return null;
